@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+/*
+ * StudySprint colours: "Paper, Ink & Marigold", following the 70-20-10 rule.
+ *
+ *   70%  Paper     canvas, surface, sunken, line   calm base for everything
+ *   20%  Ink navy  brand                           nav bar, main buttons, selection
+ *   10%  Marigold  accent                          Today, focus, the one key action
+ *
+ * Status colours are used only for their meaning:
+ *   success (moss)  = done          danger (brick) = delete, exam days, errors
+ *
+ * Components use these names (bg-canvas, text-ink, bg-brand, ring-accent …),
+ * never raw Tailwind colours, so dark mode and any future change happen here only.
+ * Each colour pair (e.g. brand + brand-ink) was checked for readable contrast.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* 70%: paper */
+  --canvas: #f7f5f0;
+  --surface: #ffffff;
+  --sunken: #efebe3;
+  --line: #e2dcd0;
+  --line-strong: #c9c1b2;
+
+  /* Text */
+  --ink: #1c2333;
+  --ink-muted: #5b6170;
+  --ink-faint: #8a8f9b;
+
+  /* 20%: ink navy */
+  --brand: #233a5e;
+  --brand-hover: #2e4a75;
+  --brand-ink: #ffffff;
+  --brand-soft: #e3e8f1;
+
+  /* 10%: marigold */
+  --accent: #f2a541;
+  --accent-hover: #e8952a;
+  --accent-ink: #1c2333;
+  --accent-soft: #fdf0da;
+
+  /* Meanings */
+  --success: #2f7a55;
+  --success-ink: #ffffff;
+  --success-soft: #e1f0e7;
+  --danger: #b4382a;
+  --danger-hover: #9a2e22;
+  --danger-ink: #ffffff;
+  --danger-soft: #f8e3df;
+
+  /* Module colours: muted, distinct, and never red or orange (those mean exam / accent). */
+  --m1: #3f6fb5;
+  --m2: #2a8c82;
+  --m3: #6a8f3a;
+  --m4: #7a5aa6;
+  --m5: #a8706a;
+  --m6: #3e8fb0;
+  --m7: #8c6d3f;
+  --m8: #a05a8c;
+
+  --nav: #233a5e;
+  --nav-ink: #ffffff;
+  --nav-muted: #c3cde0;
+}
+
+/* Dark mode: the header switch (or your device setting, until you use it) sets
+   data-theme="dark" on <html>. See src/lib/theme.ts. */
+:root[data-theme="dark"] {
+  color-scheme: dark; /* dark scrollbars, date and select pop-ups */
+  --canvas: #12151c;
+  --surface: #1a1f29;
+  --sunken: #232938;
+  --line: #2e3544;
+  --line-strong: #444d60;
+
+  --ink: #ece9e2;
+  --ink-muted: #a3a9b6;
+  --ink-faint: #737a89;
+
+  --brand: #9db7e6;
+  --brand-hover: #b5c9ee;
+  --brand-ink: #12151c;
+  --brand-soft: #243250;
+
+  --accent: #f2a541;
+  --accent-hover: #f5b562;
+  --accent-ink: #12151c;
+  --accent-soft: #3a2e1a;
+
+  --success: #6cc196;
+  --success-ink: #0f1a14;
+  --success-soft: #1b3326;
+  --danger: #ec7d6d;
+  --danger-hover: #f19a8d;
+  --danger-ink: #1a0f0d;
+  --danger-soft: #3d1f1b;
+
+  --m1: #7fa4dc;
+  --m2: #5fbfb4;
+  --m3: #9cc06a;
+  --m4: #ad90d6;
+  --m5: #d59f98;
+  --m6: #74bddb;
+  --m7: #c4a273;
+  --m8: #d08cbe;
+
+  --nav: #1c2740;
+  --nav-ink: #ece9e2;
+  --nav-muted: #9aa6bf;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-sunken: var(--sunken);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  /* Navy mixed with the card colour: solid, so it never turns grey over other colours. */
+  --color-brand-muted: color-mix(in oklab, var(--brand) 45%, var(--surface));
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-success-ink: var(--success-ink);
+  --color-success-soft: var(--success-soft);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-ink: var(--danger-ink);
+  --color-danger-soft: var(--danger-soft);
+  --color-nav: var(--nav);
+  --color-nav-ink: var(--nav-ink);
+  --color-nav-muted: var(--nav-muted);
+  --color-m1: var(--m1);
+  --color-m2: var(--m2);
+  --color-m3: var(--m3);
+  --color-m4: var(--m4);
+  --color-m5: var(--m5);
+  --color-m6: var(--m6);
+  --color-m7: var(--m7);
+  --color-m8: var(--m8);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* One focus style everywhere: a marigold ring you can always see. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}

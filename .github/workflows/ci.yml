@@ -1,0 +1,53 @@
+# Runs the same checks you run locally on every push to main and every pull
+# request, on a fresh Linux machine at GitHub. A red ❌ means one step failed;
+# click it on GitHub to see which one and why.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Only read access is needed to check out and test the code.
+permissions:
+  contents: read
+
+# A newer push to the same branch cancels the older, still-running check.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Placeholders, not your real keys: the build only needs the names to
+      # exist. Nothing in CI talks to Supabase (tests use a fake database).
+      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_placeholder
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # next typegen first: it creates the route types (PageProps, LayoutProps)
+      # that a fresh checkout has no .next folder for yet.
+      - name: Type-check
+        run: npx next typegen && npx tsc --noEmit
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
